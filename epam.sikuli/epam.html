@@ -1,0 +1,203 @@
+
+<html>
+   <head>
+      <style type="text/css">
+         .sikuli-code {
+            font-size: 20px;
+            font-family: "Osaka-mono", Monospace;
+            line-height: 1.5em;
+            display:table-cell;
+            white-space: pre-wrap;       /* css-3 */
+            white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+            width: 99%;   /* remove horizontal scroll-bar when viewing in IE7 */
+         }
+         .sikuli-code img {
+            vertical-align: middle;
+            margin: 2px;
+            border: 1px solid #ccc;
+            padding: 2px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-box-shadow: 1px 1px 1px gray;
+            -webkit-box-shadow: 1px 1px 2px gray;
+         }
+         .kw {
+            color: blue;
+         }
+         .skw {
+            color: rgb(63, 127, 127);
+         }
+
+         .str {
+            color: rgb(128, 0, 0);
+         }
+
+         .dig {
+            color: rgb(128, 64, 0);
+         }
+
+         .cmt {
+            color: rgb(200, 0, 200);
+         }
+
+         h2 {
+            display: inline;
+            font-weight: normal;
+         }
+
+         .info {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            display: none;
+         }
+
+         a {
+            color: #9D2900;
+         }
+
+         body {
+            font-family: "Trebuchet MS", Arial, Sans-Serif;
+         }
+
+      </style>
+   </head>
+<body>
+<div class="info">
+<h2>epam.sikuli</h2> <a href="epam.zip">(Download this script)</a>
+</div>
+<pre class="sikuli-code">
+<span class="cmt"># This is a demo skript to display the feature of sikuli</span>
+
+<span class="kw">import</span> os
+
+
+<span class="cmt"># ============ constants ==================</span>
+homePageUrl = <span class="str">"http://www.epam.com"</span>
+
+
+<span class="cmt"># ============ images =====================</span>
+<span class="cmt"># ainol specific</span>
+LTainol = <img src="lt_ainol.png" />
+browser = <img src="browser.png" />
+sixDots = <img src="sixDots.png" />
+browserHome = <img src="browserHome.png" />
+
+<span class="cmt"># home page images</span>
+mobileMenu = <img src="mobileMenu.png" />
+topUtilityMenu = <img src="topUtilityMenu.png" />
+learnMoreBtn  = <img src="learnMoreBtn.png" />
+whatsNewBtn   = <img src="whatsNewBtn.png" />
+whoWeAre_1   = <img src="whoWeAre_1.png" />
+whoWeServe_0 = <img src="whoWeServe_0.png" />
+whatWeDo_0   = <img src="whatWeDo_0.png" />
+developers   = <img src="developers.png" />
+testers      = <img src="testers.png" />
+designers    = <img src="designers.png" />
+solutionExperts = <img src="solutionExperts.png" />
+deliveryMngr = <img src="deliveryMngr.png" />
+leaders      = <img src="leaders.png" />
+whatsNew     = <img src="whatsNew.png" />
+theLatest_1  = <img src="theLatest_1.png" />
+pressReleases_0 = <img src="pressReleases_0.png" />
+events_0     = <img src="events_0.png" />
+inTheNews_0  = <img src="inTheNews_0.png" />
+viewAllBtn   = <img src="viewAllBtn.png" />
+contactUsBtn = <img src="contactUsBtn.png" />
+leftFooter   = <img src="leftFooter.png" />
+middleFooter = <img src="middleFooter.png" />
+rightFooter  = <img src="rightFooter.png" />
+
+
+
+
+
+
+<span class="cmt"># ============= scripts ====================</span>
+<span class="kw">def</span> verifyHomePage(pageUrl):
+    <span class="cmt"># check the page structure</span>
+    <span class="cmt"># outputs the test results</span>
+    <span class="cmt"># returns string with the summary of test results</span>
+    result = True
+    <span class="cmt"># perform the tests</span>
+    browserAddress = Region(<span class="skw">find</span>(browserHome)).right()
+    paste(browserAddress, pageUrl)
+    <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="skw">type</span>(Key.ENTER)
+    <span class="kw">print</span> <span class="str">"Browser address string found."</span>
+    <span class="cmt"># wait until the change in the middle of the page (TBD)</span>
+    <span class="skw">wait</span>(<span class="dig">10</span>)
+
+    <span class="cmt"># verify the top menu</span>
+    topLeft = browserAddress.below(<span class="dig">100</span>).left()
+    <span class="kw">if</span> (<span class="kw">not</span> topLeft.exists(mobileMenu)):
+        <span class="kw">print</span> <span class="str">"Mobile menu not found. - Failed"</span>
+        result = False
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"Mobile menu found. - Passed"</span>
+        topLeft = Region(<span class="skw">find</span>(mobileMenu))
+        <span class="kw">if</span> (<span class="kw">not</span> topLeft.right().exists(topUtilityMenu)):
+            result = False
+            <span class="kw">print</span> <span class="str">"Top Utility Menu not found. - Failed"</span>
+        <span class="kw">else</span>:
+            <span class="kw">print</span> <span class="str">"Top Utility Menu found."</span>
+
+    <span class="cmt"># verify the text</span>
+    block1Text = text()
+    <span class="kw">print</span> block1Text
+
+    <span class="cmt"># verify the two buttons (TBD)</span>
+    wheel(learnMoreBtn, WHEEL_DOWN, <span class="dig">1</span>)
+    <span class="skw">wait</span>(<span class="dig">2</span>)
+    <span class="kw">if</span> (<span class="kw">not</span> exists(learnMoreBtn)):
+        <span class="kw">print</span> <span class="str">"Learn More Button not found. - Failed"</span>
+        result = False
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"Learn More Button found. - Passed"</span>
+
+
+    <span class="kw">print</span> <span class="str">"verifyHomePage : \r\n"</span> + str(result)
+    <span class="kw">return</span> result
+<span class="cmt"># end of def verifyHomePage(pageUrl):</span>
+
+
+<span class="kw">def</span> startBrowser(home, browser):
+    <span class="cmt"># click the home image, search for browser and start it</span>
+    <span class="kw">if</span> (<span class="kw">not</span> exists(home)):
+        result = <span class="str">"sixDots not found. \r\n"</span>
+    <span class="kw">else</span>:
+        <span class="skw">click</span>(home)
+        waitVanish(home)
+        result = <span class="str">"sixDots found. \r\n"</span>
+
+    <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="skw">click</span>(browser)
+    waitVanish(browser)
+
+    <span class="kw">print</span> <span class="str">"startBrowser : "</span> + result
+    <span class="kw">return</span> result
+
+<span class="cmt"># ============= settings ===================</span>
+myPath = os.path.dirname(getBundlePath())
+<span class="kw">print</span> (myPath )
+<span class="cmt">#selectDevice()</span>
+imgPath = myPath + <span class="str">"\\epam.sikuli\\imgs\\ainol"</span>
+addImagePath (imgPath)
+<span class="kw">print</span> (<span class="str">"The real image path is: "</span> + imgPath)
+<span class="cmt">#"E:\\skdemo\\epam.sikuli\\imgs\\ainol"</span>
+
+<span class="cmt"># We can check the speed and use it later on</span>
+<span class="cmt">#startTime = </span>
+startBrowser(sixDots, browser)
+<span class="cmt">#stopTime = </span>
+<span class="cmt">#elapsedTime = </span>
+
+<span class="cmt"># ============= test cases ================</span>
+
+verifyHomePage(homePageUrl)
+</pre>
+</body>
+</html>
