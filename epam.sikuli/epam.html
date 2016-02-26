@@ -70,7 +70,8 @@
 <h2>epam.sikuli</h2> <a href="epam.zip">(Download this script)</a>
 </div>
 <pre class="sikuli-code">
-<span class="cmt"># This is a demo skript to display the feature of sikuli</span>
+<span class="cmt"># This is a demo skript to display the features of SikuliX.</span>
+<span class="cmt"># Team Viewer is used to control the real Android device.</span>
 
 <span class="kw">import</span> os
 
@@ -91,6 +92,7 @@ mobileMenu = <img src="mobileMenu.png" />
 topUtilityMenu = <img src="topUtilityMenu.png" />
 learnMoreBtn  = <img src="learnMoreBtn.png" />
 whatsNewBtn   = <img src="whatsNewBtn.png" />
+threeTabs    = <img src="threeTabs.png" />
 whoWeAre_1   = <img src="whoWeAre_1.png" />
 whoWeServe_0 = <img src="whoWeServe_0.png" />
 whatWeDo_0   = <img src="whatWeDo_0.png" />
@@ -101,6 +103,8 @@ solutionExperts = <img src="solutionExperts.png" />
 deliveryMngr = <img src="deliveryMngr.png" />
 leaders      = <img src="leaders.png" />
 whatsNew     = <img src="whatsNew.png" />
+fourTabs     = <img src="fourTabs.png" />
+iconPaper    = <img src="iconPaper.png" />
 theLatest_1  = <img src="theLatest_1.png" />
 pressReleases_0 = <img src="pressReleases_0.png" />
 events_0     = <img src="events_0.png" />
@@ -123,13 +127,18 @@ rightFooter  = <img src="rightFooter.png" />
     <span class="cmt"># returns string with the summary of test results</span>
     result = True
     <span class="cmt"># perform the tests</span>
-    browserAddress = Region(<span class="skw">find</span>(browserHome)).right()
+    browserAddress = Region(<span class="skw">find</span>(browserHome)).right(<span class="dig">800</span>)
+    browserAddress.highlight(<span class="dig">1</span>)
     paste(browserAddress, pageUrl)
-    <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="cmt">#type(browserAddress, pageUrl + Key.ENTER)</span>
+    <span class="skw">wait</span>(<span class="dig">2</span>)
     <span class="skw">type</span>(Key.ENTER)
     <span class="kw">print</span> <span class="str">"Browser address string found."</span>
     <span class="cmt"># wait until the change in the middle of the page (TBD)</span>
-    <span class="skw">wait</span>(<span class="dig">10</span>)
+    <span class="skw">wait</span>(mobileMenu, <span class="dig">15</span>)
+    <span class="skw">wait</span>(<span class="dig">2</span>)
+    <span class="cmt">#tmmr = Region(getLastMatch())</span>
+    <span class="cmt">#tmmr.highlight(2)</span>
 
     <span class="cmt"># verify the top menu</span>
     topLeft = browserAddress.below(<span class="dig">100</span>).left()
@@ -139,24 +148,211 @@ rightFooter  = <img src="rightFooter.png" />
     <span class="kw">else</span>:
         <span class="kw">print</span> <span class="str">"Mobile menu found. - Passed"</span>
         topLeft = Region(<span class="skw">find</span>(mobileMenu))
+        topLeft.highlight(<span class="dig">1</span>)
         <span class="kw">if</span> (<span class="kw">not</span> topLeft.right().exists(topUtilityMenu)):
             result = False
             <span class="kw">print</span> <span class="str">"Top Utility Menu not found. - Failed"</span>
         <span class="kw">else</span>:
-            <span class="kw">print</span> <span class="str">"Top Utility Menu found."</span>
+            <span class="kw">print</span> <span class="str">"Top Utility Menu found. - Passed"</span>
+            utmr = Region(topLeft.right().<span class="skw">find</span>(topUtilityMenu))
+            utmr.highlight(<span class="dig">1</span>)
 
     <span class="cmt"># verify the text</span>
-    block1Text = text()
-    <span class="kw">print</span> block1Text
+    appRegion = topLeft.below(<span class="dig">370</span>).right(<span class="dig">980</span>)
+    appRegion.highlight(<span class="dig">1</span>)
+    <span class="cmt">#block1Text = appRegion.text().encode('utf-8')</span>
+    <span class="cmt">#print "Block1 text: " + block1Text</span>
 
-    <span class="cmt"># verify the two buttons (TBD)</span>
-    wheel(learnMoreBtn, WHEEL_DOWN, <span class="dig">1</span>)
-    <span class="skw">wait</span>(<span class="dig">2</span>)
-    <span class="kw">if</span> (<span class="kw">not</span> exists(learnMoreBtn)):
+    <span class="cmt"># verify Learn More Button &amp; What's New Button</span>
+    <span class="cmt">#wheel(learnMoreBtn, WHEEL_DOWN, 1)</span>
+    appRegion.hover()
+    <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">while</span> (<span class="kw">not</span> appRegion.exists(learnMoreBtn)):
+        wheel(WHEEL_DOWN, <span class="dig">1</span>)
+        <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">if</span> (<span class="kw">not</span> appRegion.exists(learnMoreBtn)):
         <span class="kw">print</span> <span class="str">"Learn More Button not found. - Failed"</span>
         result = False
     <span class="kw">else</span>:
         <span class="kw">print</span> <span class="str">"Learn More Button found. - Passed"</span>
+        lmbr = Region(appRegion.<span class="skw">find</span>(learnMoreBtn))
+        lmbr.highlight(<span class="dig">1</span>)
+        <span class="cmt"># verify What's New Button is displayed</span>
+        <span class="kw">if</span> (<span class="kw">not</span> lmbr.right().exists(whatsNewBtn)):
+            <span class="kw">print</span> <span class="str">"What's New Button not found. - Failed"</span>
+            result = False
+        <span class="kw">else</span>:
+            <span class="kw">print</span> <span class="str">"What's New Button found. - Passed"</span>
+            wnbr = lmbr.right().<span class="skw">find</span>(whatsNewBtn)
+            wnbr.highlight(<span class="dig">1</span>)
+
+    <span class="cmt"># verify 3 tabs are displayed (TBD)</span>
+    <span class="skw">wait</span>(<span class="dig">1</span>)
+    wheel(WHEEL_DOWN, <span class="dig">1</span>) <span class="cmt"># just do it</span>
+    <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="cmt"># temporary consolidated solution</span>
+    <span class="kw">while</span> (<span class="kw">not</span> appRegion.exists(threeTabs)):
+        wheel(WHEEL_DOWN, <span class="dig">1</span>)
+        <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">if</span> (<span class="kw">not</span> appRegion.exists(threeTabs)):
+        <span class="kw">print</span> <span class="str">"Three tabs not found. - Failed"</span>
+        result = False
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"Three tabs found. - Passed"</span>
+        wwar = Region(appRegion.<span class="skw">find</span>(threeTabs))
+        wwar.highlight(<span class="dig">1</span>)
+
+    <span class="cmt"># verify six specializaion</span>
+    <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">while</span> (<span class="kw">not</span> appRegion.exists(developers)):
+        wheel(WHEEL_DOWN, <span class="dig">1</span>)
+        <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">if</span> (<span class="kw">not</span> appRegion.exists(developers)):
+        <span class="kw">print</span> <span class="str">"Developers not found. - Failed"</span>
+        result = False
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"Developers found. - Passed"</span>
+        devr = Region(appRegion.<span class="skw">find</span>(developers))
+        devr.highlight(<span class="dig">1</span>)
+    <span class="kw">if</span> (<span class="kw">not</span> appRegion.exists(testers)):
+        <span class="kw">print</span> <span class="str">"Testers not found. - Failed"</span>
+        result = False
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"Testers found. - Passed"</span>
+        tesr = Region(appRegion.<span class="skw">find</span>(testers))
+        tesr.highlight(<span class="dig">1</span>)
+
+    <span class="cmt"># Designers &amp; Solution Experts </span>
+    <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">while</span> (<span class="kw">not</span> appRegion.exists(designers)):
+        wheel(WHEEL_DOWN, <span class="dig">1</span>)
+        <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">if</span> (<span class="kw">not</span> appRegion.exists(designers)):
+        <span class="kw">print</span> <span class="str">"Developers not found. - Failed"</span>
+        result = False
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"Developers found. - Passed"</span>
+        desr = Region(appRegion.<span class="skw">find</span>(designers))
+        desr.highlight(<span class="dig">1</span>)
+    <span class="kw">if</span> (<span class="kw">not</span> appRegion.exists(solutionExperts)):
+        <span class="kw">print</span> <span class="str">"Solution Experts not found. - Failed"</span>
+        result = False
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"Solution Experts found. - Passed"</span>
+        tesr = Region(appRegion.<span class="skw">find</span>(solutionExperts))
+        tesr.highlight(<span class="dig">1</span>)
+
+    <span class="cmt"># Delivery Managers &amp; Leadres                    </span>
+    <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">while</span> (<span class="kw">not</span> appRegion.exists(deliveryMngr)):
+        wheel(WHEEL_DOWN, <span class="dig">1</span>)
+        <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">if</span> (<span class="kw">not</span> appRegion.exists(deliveryMngr)):
+        <span class="kw">print</span> <span class="str">"Delivery Managers not found. - Failed"</span>
+        result = False
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"Delivery Managers found. - Passed"</span>
+        dlmr = Region(appRegion.<span class="skw">find</span>(deliveryMngr))
+        dlmr.highlight(<span class="dig">1</span>)
+    <span class="kw">if</span> (<span class="kw">not</span> appRegion.exists(leaders)):
+        <span class="kw">print</span> <span class="str">"Leadres not found. - Failed"</span>
+        result = False
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"Leadres found. - Passed"</span>
+        ldrr = Region(appRegion.<span class="skw">find</span>(leaders))
+        ldrr.highlight(<span class="dig">1</span>)
+
+
+    <span class="cmt"># verify 4 tabs are displayed</span>
+    <span class="cmt"># Temporary</span>
+    <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">while</span> (<span class="kw">not</span> appRegion.exists(fourTabs)):
+        wheel(WHEEL_DOWN, <span class="dig">1</span>)
+        <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">if</span> (<span class="kw">not</span> appRegion.exists(fourTabs)):
+        <span class="kw">print</span> <span class="str">"Delivery Managers not found. - Failed"</span>
+        result = False
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"Delivery Managers found. - Passed"</span>
+        ftbr = Region(appRegion.<span class="skw">find</span>(fourTabs))
+        ftbr.highlight(<span class="dig">1</span>)
+
+    <span class="cmt"># drag and drop the carousel</span>
+    t1 = appRegion.get(Region.EAST).<span class="skw">find</span>(iconPaper)
+    <span class="cmt">#dragDrop(t1, [t1.x - 450, t1.y])</span>
+    <span class="skw">dragDrop</span>(t1, t1.offset(Location(-<span class="dig">450</span>, <span class="dig">0</span>)))
+    <span class="skw">wait</span>(<span class="dig">2</span>)
+    t1 = appRegion.get(Region.EAST).<span class="skw">find</span>(iconPaper)
+    <span class="skw">dragDrop</span>(t1, [t1.x - <span class="dig">450</span>, t1.y])
+    <span class="skw">wait</span>(<span class="dig">2</span>)
+    ppr = get(Region.WEST)
+    t1 = appRegion.get(Region.EAST).<span class="skw">find</span>(iconPaper)
+    <span class="skw">dragDrop</span>(t1, [t1.x + <span class="dig">450</span>, t1.y])
+    <span class="skw">wait</span>(<span class="dig">2</span>)
+
+    <span class="cmt"># verify View All button is present    </span>
+    <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">while</span> (<span class="kw">not</span> appRegion.exists(viewAllBtn)):
+        wheel(WHEEL_DOWN, <span class="dig">1</span>)
+        <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">if</span> (<span class="kw">not</span> appRegion.exists(viewAllBtn)):
+        <span class="kw">print</span> <span class="str">"Delivery Managers not found. - Failed"</span>
+        result = False
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"Delivery Managers found. - Passed"</span>
+        ftbr = Region(appRegion.<span class="skw">find</span>(viewAllBtn))
+        ftbr.highlight(<span class="dig">1</span>)
+
+
+
+    <span class="cmt"># verify the spin ribbon is displayed</span>
+    <span class="cmt"># verify ContactUs button is present</span>
+    <span class="cmt"># verify ContactUs button and the bottom menu is displayed</span>
+    appRegion.hover()
+    <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">while</span> (<span class="kw">not</span> appRegion.exists(middleFooter)):
+        wheel(WHEEL_DOWN, <span class="dig">1</span>)
+        <span class="skw">wait</span>(<span class="dig">1</span>)
+
+    <span class="cmt"># verify ContactUs button is present</span>
+    <span class="kw">if</span> (<span class="kw">not</span> appRegion.exists(contactUsBtn)):
+        <span class="kw">print</span> <span class="str">"Contact Us Button not found. - Failed"</span>
+        result = False
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"Contact Us Button found. - Passed"</span>
+        cubr = Region(appRegion.<span class="skw">find</span>(contactUsBtn))
+        cubr.highlight(<span class="dig">1</span>)
+
+    <span class="cmt"># verify the bottom menu is displayed</span>
+    <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">if</span> (<span class="kw">not</span> appRegion.exists(middleFooter)):
+        <span class="kw">print</span> <span class="str">"Middle Footer not found. - Failed"</span>
+        result = False
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"Middle Footer found. - Passed"</span>
+        mfr = Region(appRegion.<span class="skw">find</span>(middleFooter))
+        mfr.highlight(<span class="dig">1</span>)
+
+    <span class="cmt"># verify Left Footer is displayed</span>
+    <span class="cmt">#if (not appRegion.exists(leftFooter)):</span>
+    <span class="kw">if</span> (<span class="kw">not</span> mfr.left().exists(leftFooter)):
+        <span class="kw">print</span> <span class="str">"Left Footer not found. - Failed"</span>
+        result = False
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"Left Footer found. - Passed"</span>
+        lfr = Region(mfr.left().<span class="skw">find</span>(leftFooter))
+        lfr.highlight(<span class="dig">1</span>)
+
+    <span class="cmt"># verify Right Footer is displayed</span>
+    <span class="kw">if</span> (<span class="kw">not</span> appRegion.exists(rightFooter)):
+    <span class="cmt">#if (not mfr.right().exists(rightFooter)):</span>
+        <span class="kw">print</span> <span class="str">"Right Footer not found. - Failed"</span>
+        result = False
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"Right Footer found. - Passed"</span>
+        <span class="cmt">#rfr = Region(mfr.right().find(rightFooter))</span>
+        rfr = Region(appRegion.<span class="skw">find</span>(rightFooter))
+        rfr.highlight(<span class="dig">1</span>)
 
 
     <span class="kw">print</span> <span class="str">"verifyHomePage : \r\n"</span> + str(result)
