@@ -1,1 +1,1 @@
-# skd
+# This is a quick demo of UI elements testing using SikuliX.
